@@ -57,7 +57,6 @@ namespace TRUSTEDBOOT
         return (sizeof(TCG_EfiSpecIdEventStruct) + val->vendorInfoSize);
     }
 
-#ifdef __HOSTBOOT_MODULE
     errlHndl_t TpmLogMgr_initialize(TpmLogMgr* val)
     {
         errlHndl_t err = TB_SUCCESS;
@@ -143,7 +142,6 @@ namespace TRUSTEDBOOT
         }
         return err;
     }
-#endif
 
     errlHndl_t TpmLogMgr_initializeUsingExistingLog(TpmLogMgr* val,
                                                     uint8_t* eventLogPtr,

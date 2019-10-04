@@ -87,17 +87,15 @@ namespace TRUSTEDBOOT
         uint32_t logMaxSize;     ///< Space allocated for log entries
         uint8_t* newEventPtr;    ///< Pointer to location to add new event
         uint8_t* eventLogInMem;  ///< Event log allocated from memory
-#ifdef __HOSTBOOT_MODULE
         uint64_t inMemlogBaseAddr; ///< Base address of log for dev tree
         uint64_t devtreeXscomAddr; ///< Devtree Xscom Address
         uint32_t devtreeI2cMasterOffset; ///< Devtree I2c Master Offset
         uint8_t eventLog[TPMLOG_BUFFER_SIZE]; ///< EventLog Buffer
-#endif
+
         mutex_t  logMutex;       ///< Log mutex
     };
     typedef struct _TpmLogMgr TpmLogMgr;
 
-#ifdef __HOSTBOOT_MODULE
     /**
      * @brief Initialize the log manager
      * @param[in/out] io_logMgr Return a pointer to the log manager
@@ -105,7 +103,7 @@ namespace TRUSTEDBOOT
      *       error log.
      */
     errlHndl_t TpmLogMgr_initialize(TpmLogMgr * io_logMgr);
-#endif
+
 
     /**
      * @brief Initialize the log manager to use a pre-existing buffer

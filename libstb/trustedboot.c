@@ -114,7 +114,7 @@ void trustedboot_init(void)
 	if (!trusted_mode)
 		return;
 
-	cvc_init();
+	//cvc_init();
 	tpm_init();
 
 	trusted_init = true;

@@ -74,6 +74,7 @@ int tpm_register_chip(struct dt_node *node, struct tpm_dev *dev,
 	uint64_t sml_base;
 	uint32_t sml_size;
 	struct tpm_chip *tpm;
+	bool fake = false;
 
 	i = 0;
 	list_for_each(&tpm_list, tpm, link) {
@@ -113,7 +114,10 @@ int tpm_register_chip(struct dt_node *node, struct tpm_dev *dev,
 		 */
 		prlog(PR_ERR, "linux,sml-base property not found "
 		      "tpm node %p\n", node);
-		goto disable;
+
+		prlog(PR_ERR, "maybe we're in qemu mode\n");
+		fake = true;
+		goto fakeit;
 	}
 
 	sml_size = dt_prop_get_u32_def(node, "linux,sml-size", 0);
@@ -150,7 +154,12 @@ int tpm_register_chip(struct dt_node *node, struct tpm_dev *dev,
 		      tpm->id, rc);
 		goto disable;
 	}
+	goto good;
 
+fakeit:
+	TpmLogMgr_initialize(&tpm->logmgr);
+
+good:
 	tpm->enabled = true;
 	tpm->node = node;
 	tpm->dev = dev;
@@ -161,6 +170,10 @@ int tpm_register_chip(struct dt_node *node, struct tpm_dev *dev,
 	prlog(PR_NOTICE, "Found tpm%d,%s evLogLen=%d evLogSize=%d\n",
 	      tpm->id, tpm->driver->name, tpm->logmgr.logSize,
 	      tpm->logmgr.logMaxSize);
+
+	if (fake) {
+		tpmCmdStartup(tpm);
+	}
 
 	return 0;
 
