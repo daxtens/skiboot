@@ -248,4 +248,5 @@ struct efi_variable_authentication_2 {
 	struct win_certificate_uefi_guid auth_info;
 };
 
+#pragma pack()
 #endif
